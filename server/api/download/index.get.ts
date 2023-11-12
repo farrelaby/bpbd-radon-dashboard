@@ -1,11 +1,23 @@
 import { AsyncParser } from "@json2csv/node";
-import { RadonGwl } from "~/db/models/radon_gwl";
+import dayjs from "dayjs";
+import { db } from "~/db";
 
 const parser = new AsyncParser({});
 
 export default defineEventHandler(async (event) => {
-  const data = await RadonGwl.findAll({
-    raw: true,
+  const query = getQuery(event);
+  const { start, end } = query;
+
+  const endPlusOne = dayjs(end as string)
+    .add(1, "day")
+    .format("YYYY-MM-DD");
+
+  const data = await db.query.radonGwl.findMany({
+    where: (radonGwl, { and, gte, lte }) =>
+      and(
+        gte(radonGwl.createdAt, new Date(start as string)),
+        lte(radonGwl.createdAt, new Date(endPlusOne as string)),
+      ),
   });
 
   const csv = await parser.parse(data).promise();

@@ -1,4 +1,5 @@
-import { RadonGwl } from "~/db/models/radon_gwl";
+import { db } from "~/db";
+import { radonGwl } from "~/db/schema";
 
 export default defineEventHandler(async (event) => {
   const reqBody = await readBody(event);
@@ -13,6 +14,8 @@ export default defineEventHandler(async (event) => {
   const newData = {
     radon_concentration: parseFloat(body.Radon),
     ground_water_level: parseFloat(body.GWL),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   //   const headers = getRequestHeader(event, "authorization");
@@ -27,7 +30,7 @@ export default defineEventHandler(async (event) => {
       message: "Bad Request",
     });
   }
-  await RadonGwl.create(newData);
+  await db.insert(radonGwl).values(newData);
 
   return "Success";
 });

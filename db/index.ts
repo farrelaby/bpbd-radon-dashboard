@@ -1,8 +1,8 @@
-import { Sequelize } from "sequelize";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-// import * as pg from 'pg'
+import * as schema from "./schema";
 
-// Connect to database
-export const db = new Sequelize(process.env.DB_URL as string, {
-  dialect: "postgres",
-});
+const queryClient = postgres(process.env.DB_URL as string);
+
+export const db = drizzle(queryClient, { schema });
