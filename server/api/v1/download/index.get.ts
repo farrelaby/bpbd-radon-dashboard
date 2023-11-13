@@ -2,7 +2,15 @@ import { AsyncParser } from "@json2csv/node";
 import dayjs from "dayjs";
 import { db } from "~/db";
 
-const parser = new AsyncParser({});
+const parser = new AsyncParser({
+  fields: [
+    "id",
+    "radon_concentration",
+    "ground_water_level",
+    "createdAt",
+    "updatedAt",
+  ],
+});
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
@@ -23,4 +31,6 @@ export default defineEventHandler(async (event) => {
   const csv = await parser.parse(data).promise();
   setResponseHeader(event, "Content-Type", "text/csv");
   return csv;
+
+  // return data;
 });
