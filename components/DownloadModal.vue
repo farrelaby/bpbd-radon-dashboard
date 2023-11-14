@@ -1,11 +1,25 @@
 <script setup>
 const isOpen = ref(false);
+
+const startDate = ref(new Date().toISOString().slice(0, 10));
+const endDate = ref(new Date().toISOString().slice(0, 10));
+
+const downloadHandler = async () => {
+  const url = computed(
+    () => `/api/v1/download?start=${startDate.value}&end=${endDate.value}`,
+  );
+  await navigateTo(url.value, {
+    open: {
+      target: "_blank",
+    },
+  });
+};
 </script>
 
 <template>
   <div>
     <UButton
-      color="white"
+      color="black"
       variant="solid"
       size="lg"
       label="Download Data"
@@ -14,34 +28,54 @@ const isOpen = ref(false);
     />
 
     <UModal v-model="isOpen">
-      <div class="px-8 py-4">
-        <h2 class="text-lg font-semibold">Download Data CSV</h2>
-        <div class="flex flex-row items-center justify-between px-12 pt-8">
+      <div class="border border-black bg-white px-8 py-4">
+        <h2 class="text-lg font-semibold text-black">Download Data CSV</h2>
+        <div
+          class="flex flex-row items-center justify-between gap-4 px-12 pt-8 text-black"
+        >
           <div>
             <label> Start Date</label>
-            <UInput placeholder="Start Date" size="md" type="date" />
+            <!-- <UInput placeholder="Start Date" size="md" type="date" /> -->
+            <VueDatePicker
+              v-model="startDate"
+              input-class-name="dp-custom-input"
+              :max-date="new Date()"
+              format="dd/MM/yyyy"
+              auto-apply
+              dark
+              :teleport="true"
+            ></VueDatePicker>
           </div>
 
           <div>
             <label> End Date</label>
-            <UInput placeholder="End Date" size="md" type="date" />
+            <!-- <UInput placeholder="End Date" size="md" type="date" /> -->
+            <VueDatePicker
+              v-model="endDate"
+              input-class-name="dp-custom-input"
+              :max-date="new Date()"
+              format="dd/MM/yyyy"
+              auto-apply
+              dark
+              :teleport="true"
+            ></VueDatePicker>
           </div>
         </div>
 
         <div class="flex flex-row justify-end gap-4 pt-8">
           <UButton
             color="red"
-            variant="outline"
+            variant="solid"
             size="lg"
             label="Cancel"
             @click="isOpen = false"
           />
 
           <UButton
-            variant="outline"
+            variant="solid"
             size="lg"
             label="Download"
-            @click="isOpen = false"
+            @click="downloadHandler"
           />
         </div>
       </div>
