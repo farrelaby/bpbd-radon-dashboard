@@ -15,9 +15,11 @@
     "@json2csv/node": "^7.0.3",
     "@json2csv/plainjs": "^7.0.3",
     "@nuxt/ui": "^2.10.0",
+    "@vuepic/vue-datepicker": "^7.2.2",
     "apexcharts": "^3.44.0",
     "dayjs": "^1.11.10",
     "drizzle-orm": "^0.29.0",
+    "jose": "^5.1.0",
     "postgres": "^3.4.3",
     "vue3-apexcharts": "^1.4.4"
   },
