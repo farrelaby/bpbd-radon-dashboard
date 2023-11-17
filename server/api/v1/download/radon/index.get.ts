@@ -3,13 +3,7 @@ import dayjs from "dayjs";
 import { db } from "~/db";
 
 const parser = new AsyncParser({
-  fields: [
-    "id",
-    "radon_concentration",
-    "ground_water_level",
-    "createdAt",
-    "updatedAt",
-  ],
+  fields: ["id", "radon_concentration", "createdAt", "updatedAt"],
 });
 
 export default defineEventHandler(async (event) => {
@@ -27,11 +21,14 @@ export default defineEventHandler(async (event) => {
         lte(radonGwl.createdAt, new Date(endPlusOne as string)),
       ),
     orderBy: (data, { asc }) => asc(data.createdAt),
+    columns: {
+      ground_water_level: false,
+    },
   });
 
   const csv = await parser.parse(data).promise();
   setResponseHeader(event, "Content-Type", "text/csv");
   return csv;
 
-  // return data;
+  //   return data;
 });
