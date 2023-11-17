@@ -18,11 +18,32 @@ export default defineEventHandler(async (event) => {
     updatedAt: new Date(),
   };
 
-  //   const headers = getRequestHeader(event, "authorization");
-  //   console.log(headers);
-  // const data = await RadonGwl.findAll({
-  //   raw: true,
-  // });
+  const headers = getRequestHeader(event, "authorization");
+  if (!headers) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
+
+  // console.log(headers, headers.split(" ")[1]);
+
+  const sensorAuthCode = Buffer.from(headers.split(" ")[1], "base64").toString(
+    "ascii",
+  );
+
+  const sensorAccessKey = sensorAuthCode.split(":")[0];
+  const sensorAccessToken = sensorAuthCode.split(":")[1];
+
+  if (
+    sensorAccessKey !== process.env.SENSOR_ACCESS_KEY ||
+    sensorAccessToken !== process.env.SENSOR_ACCESS_TOKEN
+  ) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
 
   if (isNaN(newData.radon_concentration) && isNaN(newData.ground_water_level)) {
     throw createError({

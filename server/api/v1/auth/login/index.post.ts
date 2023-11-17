@@ -1,3 +1,4 @@
+import { compare } from "bcrypt-ts";
 import * as jose from "jose";
 import { db } from "~/db";
 
@@ -10,11 +11,19 @@ export default defineEventHandler(async (event) => {
   const reqBody: LoginBody = await readBody(event);
 
   const data = await db.query.user.findFirst({
-    where: (user, { eq, and }) =>
-      and(eq(user.email, reqBody.email), eq(user.password, reqBody.password)),
+    where: (user, { eq }) => eq(user.email, reqBody.email),
   });
 
   if (data === undefined) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Invalid email or password",
+    });
+  }
+
+  const checkPassword = await compare(reqBody.password, data.password);
+
+  if (!checkPassword) {
     throw createError({
       statusCode: 401,
       statusMessage: "Invalid email or password",

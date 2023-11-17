@@ -1,13 +1,12 @@
 // import dayjs from "dayjs";
-import { asc, desc } from "drizzle-orm";
+import dayjs from "dayjs";
 import { db } from "~/db";
-import { radonGwl } from "~/db/schema";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
-  const { start, variable } = query;
+  const { start, end, variable } = query;
 
-  if (!start || !variable) {
+  if (!start || !end || !variable) {
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",
@@ -16,19 +15,19 @@ export default defineEventHandler(async (event) => {
 
   let responseData;
 
-  // const end = dayjs(start as string)
-  //   .add(1, "day")
-  //   .format("YYYY-MM-DD");
+  const endPlusOne = dayjs(end as string)
+    .add(1, "day")
+    .format("YYYY-MM-DD");
 
   try {
-    const sq = db
-      .select()
-      .from(radonGwl)
-      .orderBy(desc(radonGwl.createdAt))
-      .limit(20)
-      .as("sq");
-
-    const data = await db.select().from(sq).orderBy(asc(sq.createdAt));
+    const data = await db.query.radonGwl.findMany({
+      where: (radonGwl, { and, gte, lt }) =>
+        and(
+          gte(radonGwl.createdAt, new Date(start as string)),
+          lt(radonGwl.createdAt, new Date(endPlusOne as string)),
+        ),
+      orderBy: (data, { asc }) => asc(data.createdAt),
+    });
 
     if (variable === "radon") {
       responseData = data.map((item) => {
