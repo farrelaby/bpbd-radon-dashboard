@@ -1,19 +1,18 @@
 <script setup lang="ts">
 const props = defineProps({
-  startDate: {
-    required: true,
-    type: String,
-  },
   variable: {
     required: true,
     type: String,
   },
+  start: {
+    required: true,
+    type: String,
+  },
+  end: {
+    required: true,
+    type: String,
+  },
 });
-
-type FetchType = {
-  x: Date;
-  y: number | null;
-}[];
 
 let seriesName;
 let unit: string;
@@ -29,23 +28,37 @@ if (props.variable === "radon") {
   yLegend = `${seriesName} (${unit})`;
 }
 
-const url = computed(
-  () => `/api/v1/data?start=${props.startDate}&variable=${props.variable}`,
-);
+// const url = computed(() => `/api/v1/data?variable=${props.variable}`);
 
-const { data: fetchData } = await useFetch<FetchType>(url, {
+const { data, refresh, pending } = await useFetch("/api/v1/data/range", {
   method: "GET",
+  server: false,
+  query: {
+    variable: props.variable,
+    start: props.start,
+    end: props.end,
+  },
 });
+
+useIntervalFn(() => {
+  /* your function */
+  refresh();
+}, 30 * 1000);
 
 const apexOptions: ApexCharts.ApexOptions = {
   chart: {
-    id: "vuechart-example",
+    id: "detail-line-chart",
+    toolbar: {
+      tools: {
+        download: false,
+      },
+    },
   },
   xaxis: {
     type: "datetime",
-    title: {
-      text: "Jam",
-    },
+    // title: {
+    //   text: "Jam",
+    // },
   },
   yaxis: {
     title: {
@@ -69,7 +82,7 @@ const chartOptions = ref(apexOptions);
 const series = ref([
   {
     name: seriesName,
-    data: fetchData,
+    data,
   },
 ]);
 </script>
@@ -77,9 +90,10 @@ const series = ref([
 <template>
   <ClientOnly>
     <!-- <p v-if="pending">Loading...</p> -->
+    <div v-if="pending" class="w-full animate-pulse bg-gray-400"></div>
     <apexcharts
       width="100%"
-      height="100%"
+      height="120%"
       type="line"
       :options="chartOptions"
       :series="series"
