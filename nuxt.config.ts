@@ -7,7 +7,12 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
-  modules: ["@nuxtjs/eslint-module", "@nuxt/ui", "@nuxtjs/tailwindcss"],
+  modules: [
+    "@nuxtjs/eslint-module",
+    "@nuxt/ui",
+    "@nuxtjs/tailwindcss",
+    "@vueuse/nuxt",
+  ],
   eslint: {
     cache: true,
     formatter: "stylish",
@@ -22,5 +27,9 @@ export default defineNuxtConfig({
   ],
   colorMode: {
     preference: "light",
+  },
+
+  routeRules: {
+    "/**": { prerender: true },
   },
 });
