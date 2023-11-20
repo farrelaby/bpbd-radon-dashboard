@@ -5,9 +5,9 @@ import { radonGwl } from "~/db/schema";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
-  const { start, variable } = query;
+  const { variable } = query;
 
-  if (!start || !variable) {
+  if (!variable) {
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",

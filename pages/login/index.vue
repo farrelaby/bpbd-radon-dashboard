@@ -41,7 +41,7 @@ async function onSubmit(event: FormSubmitEvent<any>) {
           title: "Login Failed",
           description: "Something went wrong",
           color: "red",
-          icon: "i-heroicons-exclamation-circle-20-solid",
+          icon: "i-heroicons-x-mark-20-solid",
         });
       }
     },

@@ -19,11 +19,11 @@ const downloadHandler = async () => {
 <template>
   <div>
     <UButton
-      color="black"
+      icon="i-heroicons-arrow-down-circle"
+      color="green"
       variant="solid"
-      size="lg"
+      size="xl"
       label="Download Data"
-      class="border border-black"
       @click="isOpen = true"
     />
 

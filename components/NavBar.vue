@@ -3,10 +3,10 @@
     class="navbar relative rounded-b-xl bg-black px-8 py-2 text-white shadow-lg"
   >
     <NuxtLink to="/" class="navbar-start gap-2">
-      <img width="65" height="65" src="/klaten-logo.png" />
+      <img width="65" height="65" src="/klaten-logo.png" alt="klaten-logo" />
 
-      <img width="80" height="80" src="/bpbd-logo.png" />
-      <p className="ml-2 pr-8 text-xl font-semibold">
+      <img width="80" height="80" src="/bpbd-logo.png" alt="klaten-logo" />
+      <p className="ml-2 pr-8 text-xl 2xl:text-4xl font-semibold">
         Radon & Ground Water Level Monitoring
       </p>
     </NuxtLink>
