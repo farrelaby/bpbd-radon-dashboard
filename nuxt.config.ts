@@ -32,4 +32,10 @@ export default defineNuxtConfig({
   routeRules: {
     "/**": { prerender: true },
   },
+  app: {
+    head: {
+      title: "Radon Concentration and Groundwater Level Dashboard",
+      link: [{ rel: "icon", type: "image/x-icon", href: "/bpbd-logo.png" }],
+    },
+  },
 });

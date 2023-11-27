@@ -24,7 +24,7 @@ if (props.variable === "radon") {
   yLegend = `${seriesName} (${unit})`;
 } else if (props.variable === "gwl") {
   seriesName = "Ground Water Level";
-  unit = "m";
+  unit = "cm";
   yLegend = `${seriesName} (${unit})`;
 }
 
