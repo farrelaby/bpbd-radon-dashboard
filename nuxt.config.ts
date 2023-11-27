@@ -36,6 +36,9 @@ export default defineNuxtConfig({
     head: {
       title: "Radon Concentration and Groundwater Level Dashboard",
       link: [{ rel: "icon", type: "image/x-icon", href: "/bpbd-logo.png" }],
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
     },
   },
 });
