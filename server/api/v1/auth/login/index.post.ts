@@ -38,9 +38,12 @@ export default defineEventHandler(async (event) => {
     user: data.email,
   })
     .setProtectedHeader({ alg })
-    .setExpirationTime("240h")
+    // .setExpirationTime("240h")
     .sign(secret);
 
-  setCookie(event, "tkn", jwt, { httpOnly: true, maxAge: 240 * 60 * 60 });
+  setCookie(event, "tkn", jwt, {
+    httpOnly: true,
+    // maxAge: 10 * 365 * 24 * 60 * 60,
+  });
   return "success";
 });
